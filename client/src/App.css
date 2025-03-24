@@ -1,0 +1,101 @@
+.employee-table {
+  border: 1px solid black;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.thead{
+  background-color:rgba(250, 194, 194, 0.5);
+}
+
+.edit{
+  margin: 2px;
+  background-color: blueviolet;
+}
+
+.delete{
+  margin: 2px;
+  background-color: coral;
+}
+
+.view{
+  margin: 2px;
+  background-color: rgb(224, 205, 0);
+}
+
+.add-emp{
+  margin: 5px;
+  background-color: aqua;
+}
+
+.log-out{
+  margin: 5px;
+  background-color: antiquewhite;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
