@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { ADDEMPLOYEE, UPDATEEMPLOYEE } from "./EmployeeServices";
 import "./AddEmployee.css";
 
 interface Employee {
-  empId: string;
+  empId: any;
   fullName: string;
   designation: string;
   department: string;
-  salary: string;
+  salary: any;
 }
 
 const AddEmployee: React.FC = () => {
-  const { empId } = useParams<{ empId?: string }>();
+  const { empId } = useParams<{ empId?: any }>();
   const navigate = useNavigate();
-  console.log("llkk=>", empId);
+  const location = useLocation();
+
   const [employee, setEmployee] = useState<Employee>({
     empId: "",
     fullName: "",
@@ -23,29 +24,25 @@ const AddEmployee: React.FC = () => {
     salary: "",
   });
 
+  // Get the employee data from location state if it's available
   useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get(
-        `http://localhost:3000/api/employee/${empId}`
-      );
-      console.log("---===>", response);
-      setEmployee(response.data.employee);
+    if (empId !== undefined && location.state?.employee) {
+      const employeeToEdit = location.state.employee;
+      setEmployee(employeeToEdit);
     }
-    if (empId !== undefined) {
-      fetchData();
-    }
-  }, [empId]);
+  }, [empId, location.state]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEmployee((prevEmployee) => ({
       ...prevEmployee,
-      [name]: value,
+      [name]: name === "empId" ? (value ? Number(value) : "") : value,
     }));
   };
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (
       !employee.empId ||
       !employee.fullName ||
@@ -59,14 +56,21 @@ const AddEmployee: React.FC = () => {
 
     try {
       let response;
+      const payload = {
+        ...employee,
+        empId: Number(employee.empId),
+        salary: Number(employee.salary),
+      };
+
       if (empId === undefined) {
-        response = await axios.post("http://localhost:3000/api/employee", employee);
+        // If it's not an edit (Add new employee)
+        response = await ADDEMPLOYEE(payload);
       } else {
-        response = await axios.put(`http://localhost:3000/api/employee/${empId}`, employee);
+        // If it's an edit (Update employee)
+        response = await UPDATEEMPLOYEE(payload);
       }
-      console.log(response);
       alert(response.data.message);
-      navigate("/");
+      navigate("/"); // After adding or updating, navigate back to the employees list
     } catch (error) {
       console.error("Error saving employee data", error);
     }
@@ -82,25 +86,49 @@ const AddEmployee: React.FC = () => {
           name="empId"
           value={employee.empId}
           onChange={handleChange}
-          disabled={empId !== undefined}
+          disabled={empId !== undefined} // Disable for editing
         />
         <br />
         <label>Full Name</label>
-        <input type="text" name="fullName" value={employee.fullName} onChange={handleChange} />
+        <input
+          type="text"
+          name="fullName"
+          value={employee.fullName}
+          onChange={handleChange}
+        />
         <br />
         <label>Designation</label>
-        <input type="text" name="designation" value={employee.designation} onChange={handleChange} />
+        <input
+          type="text"
+          name="designation"
+          value={employee.designation}
+          onChange={handleChange}
+        />
         <br />
         <label>Department</label>
-        <input type="text" name="department" value={employee.department} onChange={handleChange} />
+        <input
+          type="text"
+          name="department"
+          value={employee.department}
+          onChange={handleChange}
+        />
         <br />
         <label>Salary</label>
-        <input type="number" name="salary" value={employee.salary} onChange={handleChange} />
+        <input
+          type="number"
+          name="salary"
+          value={employee.salary}
+          onChange={handleChange}
+        />
         <br />
         {empId === undefined ? (
-          <button className="add-emp" type="submit">Add Employee</button>
+          <button className="add-emp" type="submit">
+            Add Employee
+          </button>
         ) : (
-          <button className="edit" type="submit">Update Employee</button>
+          <button className="edit" type="submit">
+            Update Employee
+          </button>
         )}
       </form>
     </div>

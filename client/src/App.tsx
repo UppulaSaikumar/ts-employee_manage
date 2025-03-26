@@ -1,38 +1,39 @@
 import "./App.css";
 import Employees from "./components/Employees.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/Login.tsx";
+import Login from "./pages/Login.tsx";
 import AddEmployee from "./components/AddEmployee.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
+import CredentialsSignInPage from '../CredentialsSignInPage';
 
 const App: React.FC = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} /> {/* username : ram , password : Ram@123*/}
+          <Route path="/login" element={<CredentialsSignInPage />} /> {/* username : ram , password : Ram@123*/}
           <Route
             path="/"
             element={
-              <PrivateRoute>
+              // <PrivateRoute>
                 <Employees />
-              </PrivateRoute>
+              // </PrivateRoute>
             }
           />
           <Route
             path="/add-employee"
             element={
-              <PrivateRoute>
+              // <PrivateRoute>
                 <AddEmployee />
-              </PrivateRoute>
+              // </PrivateRoute>
             }
           />
           <Route
             path="/edit-employee/:empId"
             element={
-              <PrivateRoute>
+              // <PrivateRoute>
                 <AddEmployee />
-              </PrivateRoute>
+              // </PrivateRoute>
             }
           />
         </Routes>
