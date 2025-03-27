@@ -1,19 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { pool } from "./db.ts";
-import jwt from "jsonwebtoken";
-
-type Employee = {
-    empId: number;
-    fullName: string;
-    designation: string;
-    department: string;
-    salary: number;
-};
-
-type User = {
-    username: string;
-    password: string;
-};
+import { pool } from "../utils/db";
+import { Employee } from "../types/employee.types";
 
 export const getEmployees = (req: Request, res: Response): void => {
     pool.query("SELECT * FROM employees", (err, result) => {
@@ -55,7 +42,7 @@ export const update = (req: Request, res: Response): void => {
         if (err) {
             console.error("Database error: ", err);
             res.status(500).send("Error fetching data");
-        } else if (result.length === 0) {
+        } else if (result === null) {
             res.status(404).send("Employee not found");
         } else {
             const sql = `UPDATE employees SET fullName = ?, designation = ?, department = ?, salary = ? WHERE empId = ?`;
@@ -73,6 +60,7 @@ export const update = (req: Request, res: Response): void => {
 
 export const deletion = (req: Request, res: Response): void => {
     const { id } = req.params;
+    console.log(typeof id);
     const sql = `DELETE FROM employees WHERE empId = ?`;
     pool.query(sql, [id], (err) => {
         if (err) {
@@ -80,56 +68,6 @@ export const deletion = (req: Request, res: Response): void => {
             res.status(500).send("Error deleting data");
         } else {
             res.status(200).json({ message: "Data deleted successfully" });
-        }
-    });
-};
-
-export const login = (req: Request, res: Response): void => {
-    const { username, password } = req.body as User;
-    if (!username || !password) {
-        res.status(400).send("All fields are required");
-        return;
-    }
-    const sql = `SELECT * FROM admEmps WHERE username = ? AND password = ?`;
-    pool.query(sql, [username, password], (err, result) => {
-        if (err) {
-            console.error("Database error: ", err);
-            res.status(500).send("Error fetching data");
-        } else if (result.length === 0) {
-            res.status(401).send("Invalid username or password");
-        } else {
-            const token = jwt.sign({ username }, process.env.SECRET_KEY as string, { expiresIn: "1h" });
-            res.status(200).json({ token });
-        }
-    });
-};
-
-export const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
-    const token = req.headers.authorization;
-    if (!token) {
-        res.status(401).send("Access denied");
-        return;
-    }
-    try {
-        const data = jwt.verify(token, process.env.SECRET_KEY as string) as { username: string };
-        (req as any).username = data.username;
-        next();
-    } catch (error) {
-        res.status(400).send("Invalid token");
-    }
-};
-
-export const getEmployee = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    const sql = `SELECT * FROM employees WHERE empId = ?`;
-    pool.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error("Database error: ", err);
-            res.status(500).send("Error fetching data");
-        } else if (result.length === 0) {
-            res.status(404).send("Employee not found");
-        } else {
-            res.status(200).json({ employee: result[0] });
         }
     });
 };

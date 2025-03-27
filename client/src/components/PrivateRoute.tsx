@@ -6,7 +6,7 @@ type PrivateRouteProps = {
 };
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem("token"); // Check if token exists
+  const isAuthenticated = localStorage.getItem("auth-emp");
 
   return isAuthenticated ? children : <Navigate to="/login" />;
 };

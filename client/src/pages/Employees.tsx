@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { GETEMPLOYEES, DELETEEMPLOYEE, LOGOUT } from "../components/EmployeeServices";
+import { useContext } from "react";
+
+import { EmpCon } from "../context/Empcontext";
 
 interface Employee {
-  empId: string;
+  empId: any;
   fullName: string;
   designation: string;
   department: string;
@@ -11,6 +14,8 @@ interface Employee {
 }
 
 const Employees: React.FC = () => {
+  const ctx=useContext(EmpCon);
+  console.log("tgftgrsakjlfbakj",ctx)
   const navigate = useNavigate();
   const [view, setView] = useState<boolean>(false);
   const [viewEmployee, setViewEmployee] = useState<Employee | null>(null);
@@ -21,15 +26,16 @@ const Employees: React.FC = () => {
     navigate("/add-employee");
   };
 
-  const handleEdit = (empId: string) => {
-    navigate(`/edit-employee/${empId}`);
+  const handleEdit = (empId: any) => {
+    const employeeToEdit = employees.find((employee) => employee.empId === empId);
+    console.log("EDITEMPDETAILS",employeeToEdit);
+    navigate(`/edit-employee/${empId}`, { state: { employee: employeeToEdit } });
   };
+  
 
-  const handleDelete = async (empId: string) => {
+  const handleDelete = async (empId: number) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/employee/${empId}`
-      );
+      const response = await DELETEEMPLOYEE(empId);
       alert(response.data.message);
       setEmployees((prevEmployees) =>
         prevEmployees.filter((employee) => employee.empId !== empId)
@@ -40,21 +46,26 @@ const Employees: React.FC = () => {
     }
   };
 
-  const handleView = (empId: string) => {
+  const handleView = (empId: number) => {
     const emp = employees.find((employee) => employee.empId === empId);
     setViewEmployee(emp || null);
     setView(true);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = async() => {
+    await LOGOUT(null);
+    localStorage.clear();
     navigate("/login");
   };
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:3000/api/employees");
+        // const response = await axios.get("http://localhost:3000/api/get_employees");
+        const isauth=localStorage.getItem("auth-emp")==='true';
+        ctx!.setIsAuthenticated(isauth, localStorage.getItem("Employee"));
+        const response = await GETEMPLOYEES();
+        console.log("after context response",response.data.employees);
         setEmployees(response.data.employees);
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -67,6 +78,7 @@ const Employees: React.FC = () => {
 
   return (
     <div>
+      <h2>Hello {ctx!.name}</h2>
       <h1>Employees Table</h1>
       <button className="add-emp" onClick={handleAdd}>Add Employee</button>
       <button className="log-out" onClick={handleLogout}>Logout</button>

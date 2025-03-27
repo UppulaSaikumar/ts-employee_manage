@@ -32,12 +32,12 @@
   background-color:rgba(250, 194, 194, 0.5);
 }
 
-.edit{
+.edit,.sign-in{
   margin: 2px;
   background-color: blueviolet;
 }
 
-.delete{
+.delete,.register{
   margin: 2px;
   background-color: coral;
 }
