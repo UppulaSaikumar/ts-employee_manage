@@ -1,0 +1,17 @@
+{
+    "name": "vendor/autoload.php",
+    "description": "firebaseJWT",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\AutoloadPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "saikumar"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^6.11"
+    }
+}

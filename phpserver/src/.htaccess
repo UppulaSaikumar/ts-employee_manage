@@ -1,0 +1,30 @@
+# RewriteEngine On
+# RewriteBase /
+
+# # Clean URL for employees
+# RewriteRule ^employees$ employees.php [L]
+
+# # Clean URL for individual employee
+# RewriteRule ^employee/([0-9]+)$ get_employee.php?id=$1 [L]
+
+# # Clean URL for adding employee
+# RewriteRule ^add_employee$ add_employee.php [L]
+
+# # Clean URL for editing employee
+# RewriteRule ^edit_employee$ edit_employee.php [L]
+
+# # Clean URL for deleting employee
+# RewriteRule ^delete_employee$ delete_employee.php [L]
+
+# # Login and Register routes
+# RewriteRule ^login$ login.php [L]
+# RewriteRule ^register$ register.php [L]
+
+# # Logout route
+# RewriteRule ^logout$ logout.php [L]
+
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php [QSA,L]

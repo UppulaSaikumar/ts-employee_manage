@@ -1,0 +1,118 @@
+.employee-table {
+  border: 1px solid black;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.employee-table tbody tr td {
+  width: 200px;
+  border: 1px solid #ccc;
+}
+
+.actions{
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.thead{
+  background-color:rgba(250, 194, 194, 0.5);
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  margin-top: 6px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e6cece;
+  background-size: cover;
+  backdrop-filter: blur(2px); 
+  height: 100vh;
+}
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #555;
+  }
+  
+  input , select, option{
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  input:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+  }
